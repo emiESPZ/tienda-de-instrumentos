@@ -1,18 +1,33 @@
-import { faWeight } from '@fortawesome/free-solid-svg-icons'
-import React from 'react'
+import { useEffect, useState } from "react";
+import { itemsData } from "../data/itemsData.js";
+import ItemCard from "./ItemCard.jsx";
 
-const styleH1 = {
-  fontSize: 40,
-  color: '#4a54f1',
-  textAlign: 'center',
-  paddingTop: '100px',
-  fontWeight: '800'
-}
-function ItemListContainer(props) {
+const ItemListContainer = () => {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const getItems = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(itemsData);
+      }, 2000);
+    });
+    getItems
+      .then((result) => {
+        console.log("Se completo la promesa", result);
+        setItems(result);
+      })
+      .catch((err) => {
+        console.log("Hubo un error", err);
+      });
+  }, []);
+
   return (
-    <div><h1 style={styleH1}>{props.greeting}
-        </h1></div>
-  )
-}
+    <div className="flex mx-20 mt-20">
+      {items.map((item) => (
+        <ItemCard key={item.id} data={item} />
+      ))}
+    </div>
+  );
+};
 
-export default ItemListContainer
+export { ItemListContainer };
